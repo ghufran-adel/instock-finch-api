@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
@@ -10,12 +10,12 @@ const port = PORT || 5051;
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
-const inventoryRoutes = require('./routes/inventory-routes');
-const warehouseRoutes = require('./routes/warehouse-routes');
+const inventoryRoutes = require("./routes/inventory-routes");
+const warehouseRoutes = require("./routes/warehouse-routes");
 
 // All routes
-app.use('/warehouses', warehouseRoutes);
-app.use('/inventories', inventoryRoutes);
+app.use("/warehouses", warehouseRoutes);
+app.use("/inventories", inventoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

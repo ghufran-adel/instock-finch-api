@@ -1,18 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const knex = require("knex")(require("../knexfile"));
-
 const inventoryController = require("../controllers/inventory-controllers");
 
-//API to GET a Single Inventory Item
-router.route("/:id").get(inventoryController.findOneInventory);
+// API to GET all Inventory Item
+router.get("/", inventoryController.inventories);
+// router.route("/").get(inventoryController.inventories);
 
-router.get("/:id", (req, res) => {
-  // check if id exists in database
-  const inventoryItems = [];
-  if (!req.params || !inventoryItems.includes(req.params)) {
-    res.send("invalid id input"), 404;
-  }
-});
+//API to GET a Single Inventory Item
+router.get("/:id", inventoryController.findOneInventory);
+// router.route("/:id").get(inventoryController.findOneInventory);
 
 module.exports = router;

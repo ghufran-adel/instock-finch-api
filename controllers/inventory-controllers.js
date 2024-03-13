@@ -1,11 +1,12 @@
 const knex = require("knex")(require("../knexfile"));
 // function to find an inventory that matches with the id parmas
 const findOneInventory = async (req, res) => {
+  console.log("printing the req", req);
   try {
     const inventoriesFound = await knex("inventories").where({
       id: req.params.id,
     });
-
+    console.log(inventoriesFound);
     if (inventoriesFound.length === 0) {
       return res.status(404).json({
         message: `Inventory with ID ${req.params.id} not found`,
@@ -20,4 +21,12 @@ const findOneInventory = async (req, res) => {
   }
 };
 
-module.exports = findOneInventory;
+const inventories = async (_req, res) => {
+  try {
+    const data = await knex("inventories");
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).send(`Error retrieving Inventories: ${err}`);
+  }
+};
+module.exports = { inventories, findOneInventory };
