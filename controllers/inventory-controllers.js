@@ -11,7 +11,6 @@ const findOneInventory = async (req, res) => {
         message: `Inventory with ID ${req.params.id} not found`,
       });
     }
-
     const InventoryData = inventoriesFound[0];
     res.json(InventoryData);
   } catch (error) {
