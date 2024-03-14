@@ -67,9 +67,9 @@ const addNewInventory = async (req, res) => {
     }
     return res.status(400).json({
       message: `Validation failed: ${
-        errorMessages.length > 0
-          ? errorMessages.join("; ")
-          : "Missing required fields: " + missingFields.join(", ")
+        errorMessages.join(";") +
+        "Missing required fields: " +
+        missingFields.join(", ")
       }`,
     });
   }
