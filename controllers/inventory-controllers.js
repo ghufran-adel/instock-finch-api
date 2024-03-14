@@ -5,9 +5,6 @@ const findOneInventory = async (req, res) => {
     const inventoriesFound = await knex("inventories").where({
       id: req.params.id,
     });
-    if (!req.params.id) {
-    }
-
     if (!req.params.id || inventoriesFound.length === 0) {
       return res.status(404).json({
         message: `Inventory with ID ${req.params.id} not found`,
@@ -17,7 +14,7 @@ const findOneInventory = async (req, res) => {
     res.json(InventoryData);
   } catch (error) {
     res.status(500).json({
-      message: `Unable to retrieve inventory data for inventory item with ID ${req.params.id}`,
+      message: `Unable to retrieve inventory data for inventory item with ID ${req.params.id}, encountering error ${error}`,
     });
   }
 };
