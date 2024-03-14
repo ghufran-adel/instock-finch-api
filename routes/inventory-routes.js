@@ -6,5 +6,5 @@ router.get("/:id", inventoryController.findOneInventory);
 
 // API to GET all Inventory Item
 router.get("/", inventoryController.inventories);
-
+router.post("/", inventoryController.addNewInventory);
 module.exports = router;

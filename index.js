@@ -14,8 +14,8 @@ const inventoryRoutes = require("./routes/inventory-routes");
 const warehouseRoutes = require("./routes/warehouse-routes");
 
 // All routes
-app.use("/warehouses", warehouseRoutes);
-app.use("/inventories", inventoryRoutes);
+app.use("/api/warehouses", warehouseRoutes);
+app.use("/api/inventories", inventoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
