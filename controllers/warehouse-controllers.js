@@ -15,7 +15,6 @@ const getWarehouseByID = async (req, res) => {
     const warehouseFound = await knex("warehouses").where({
       id: req.params.id,
     });
-    console.log(req.params.id);
     if (!req.params.id || warehouseFound.length === 0) {
       return res.status(404).json({
         message: `Inventory with ID ${req.params.id} not found`,
