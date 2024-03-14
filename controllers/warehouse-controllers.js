@@ -1,5 +1,4 @@
 const knex = require('knex')(require('../knexfile'));
-const uniqid = require("uniqid");
 
 // GET warehouse list
 const getWarehouseList = async (_req, res) => {
@@ -11,12 +10,11 @@ const getWarehouseList = async (_req, res) => {
     }
 }
 
+// POST/CREATE a new warehouse -- ticket J24ID-19 --
 const postNewWarehouse = async (req, res) => {
     try {
         const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
-        const id = uniqid();
         await knex('warehouses').insert({
-            id,
             warehouse_name,
             address,
             city,
@@ -27,7 +25,7 @@ const postNewWarehouse = async (req, res) => {
             contact_email
         });
   
-        res.status(201).json({ id, ...req.body });
+        res.status(201).json({ message: 'New warehouse created successfully', data: req.body });
     } catch (error) {
         res.status(400).json({ error: `Unable to create new warehouse: ${error}` });
     }
