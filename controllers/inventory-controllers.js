@@ -52,6 +52,7 @@ const addNewInventory = async (req, res) => {
       message: `Missing required fields: ${missingFields.join(", ")}`,
     });
   }
+  // insert a data entry to database
   try {
     const result = await knex("inventories").insert(req.body);
 
@@ -60,9 +61,10 @@ const addNewInventory = async (req, res) => {
       id: newItemId,
     });
 
-    res
-      .status(201)
-      .json(`new inventory item ${createdInventoryItem} is createed`);
+    res.status(201).json({
+      message: `new inventory item with ${newItemId} is createed`,
+      data: createdInventoryItem,
+    });
   } catch (error) {
     res.status(500).json({
       message: `Unable to create new inventory item: ${error}`,
