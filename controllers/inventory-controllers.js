@@ -56,10 +56,10 @@ const addNewInventory = async (req, res) => {
     }
     // check if warehouse_id is in the warehouse table
     if (req.body.warehouse_id) {
-      const warehouse = await knex("warehouses").where({
+      const warehouseFound = await knex("warehouses").where({
         id: req.body.warehouse_id,
       });
-      if (warehouse.length === 0) {
+      if (warehouseFound.length === 0) {
         errorMessages.push(
           "The warehouse_id does not exisit in the warehouse table, please input a valid warehouse id."
         );
