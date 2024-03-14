@@ -6,4 +6,8 @@ router
     .route('/')
     .get(warehouseController.getWarehouseList);
 
+router
+    .route('/:id')
+    .patch(warehouseController.updateWarhouse);
+
 module.exports = router;
