@@ -1,13 +1,14 @@
 const knex = require("knex")(require("../knexfile"));
 // function to find an inventory that matches with the id parmas
 const findOneInventory = async (req, res) => {
-  console.log("printing the req", req);
   try {
     const inventoriesFound = await knex("inventories").where({
       id: req.params.id,
     });
-    console.log(inventoriesFound);
-    if (inventoriesFound.length === 0) {
+    if (!req.params.id) {
+    }
+
+    if (!req.params.id || inventoriesFound.length === 0) {
       return res.status(404).json({
         message: `Inventory with ID ${req.params.id} not found`,
       });
