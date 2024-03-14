@@ -47,9 +47,30 @@ const addNewInventory = async (req, res) => {
     if (!req.body.category) missingFields.push("category");
     if (!req.body.status) missingFields.push("status");
     if (!req.body.quantity) missingFields.push("quantity");
-
+    const errorMessages = [];
+    // check if quantity input is a number
+    if (req.body.quantity && !Number.isInteger(req.body.quantity)) {
+      errorMessages.push(
+        "Quanity field is not valid, please input an integer."
+      );
+    }
+    // check if warehouse_id is in the warehouse table
+    if (req.body.warehouse_id) {
+      const warehouse = await knex("warehouses").where({
+        id: req.body.warehouse_id,
+      });
+      if (!warehouse) {
+        errorMessages.push(
+          "The warehouse_id does not exisit in the warehouse table, please input a valid warehouse id."
+        );
+      }
+    }
     return res.status(400).json({
-      message: `Missing required fields: ${missingFields.join(", ")}`,
+      message: `Validation failed: ${
+        errorMessages.length > 0
+          ? errorMessages.join("; ")
+          : "Missing required fields: " + missingFields.join(", ")
+      }`,
     });
   }
   // insert a data entry to database
@@ -61,10 +82,7 @@ const addNewInventory = async (req, res) => {
       id: newItemId,
     });
 
-    res.status(201).json({
-      message: `new inventory item with ${newItemId} is createed`,
-      data: createdInventoryItem,
-    });
+    res.status(201).json(createdInventoryItem);
   } catch (error) {
     res.status(500).json({
       message: `Unable to create new inventory item: ${error}`,
