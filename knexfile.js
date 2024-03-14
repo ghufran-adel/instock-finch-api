@@ -4,6 +4,9 @@ require('dotenv').config();
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
+
+require("dotenv").config();
+
 module.exports = {
 
   client: 'mysql2',
@@ -12,6 +15,7 @@ module.exports = {
     database: process.env.DB_NAME,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
+    charset: "utf8",
   }
 
 };
