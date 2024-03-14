@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const warhouseController = require('../controllers/warehouse-controllers')
+const warehouseController = require('../controllers/warehouse-controllers')
 
 router
     .route('/')
-    .get(warhouseController.getWarehouseList);
+    .get(warehouseController.getWarehouseList);
 
 module.exports = router;
