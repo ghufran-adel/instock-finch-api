@@ -74,7 +74,7 @@ const addNewInventory = async (req, res) => {
 
 // update inventory
 const updateInventory = async (req, res) => {
-  // Check input fields
+  
   try {
     const { category, description, item_name, quantity, status, warehouse_id } = req.body;
 
