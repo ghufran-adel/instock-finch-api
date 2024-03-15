@@ -112,10 +112,26 @@ const updateWarehouse = async (req, res) => {
   }
 };
 
+// GET /api/warehouses/:id/inventories
+// Response returns 404 if warehouse ID is not found
+// Response returns 200 if warehouse exists
+
+// GET inventory for given warehouse
+const getWarehouseInventoryList = async (req, res) => {
+  try {
+    const inventory = await knex('inventories')
+    res.status(200).json(inventory);
+  } catch(error) {
+    res.status(500).json({
+      message: `error ${error}`
+    })
+  }
+}
 
 module.exports = {
   getWarehouseList,
   getWarehouseByID,
   deleteWarehouse,
   updateWarehouse,
+  getWarehouseInventoryList,
 };

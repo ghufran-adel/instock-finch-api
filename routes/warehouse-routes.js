@@ -18,4 +18,8 @@ router
     .route('/:id')
     .patch(warehouseController.updateWarehouse);
 
+router
+    .route("/:id/inventory")
+    .get(warehouseController.getWarehouseInventoryList)
+
 module.exports = router;
