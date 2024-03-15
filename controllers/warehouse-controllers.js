@@ -28,7 +28,30 @@ const getWarehouseByID = async (req, res) => {
     });
   }
 };
+
+// Response returns 404 if warehouse ID is not found
+
+// Response returns 204 if successfully deleted
+
+// No response body
+const deleteWarehouse = async(req, res) => {
+  try {
+    const getWarehouseId = await knex("warehouses").where({id: req.params.id}).del();
+    if(!req.params.id) {
+      res.status(404).json({
+        message: `Warehouse ID ${req.params.id} not found`
+      })
+    }
+    res.status(204).json({message: `warehouse ${req.params.id} succesffully deleted`})
+  } catch(error) {
+    res.status(500).json({
+      message: `Encountering error ${error}`,
+    });
+  }
+}
+
 module.exports = {
   getWarehouseList,
   getWarehouseByID,
+  deleteWarehouse,
 };
