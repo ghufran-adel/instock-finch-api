@@ -44,6 +44,56 @@ function isValidPhoneNumber(phoneNumber) {
   return phoneRegex.test(phoneNumber);
 };
 
+// POST/CREATE a new warehouse -- ticket J24ID-19 --
+const postNewWarehouse = async (req, res) => {
+  const missingFields = [];
+  if (!req.body.warehouse_name) missingFields.push("warehouse_name");
+  if (!req.body.address) missingFields.push("address");
+  if (!req.body.city) missingFields.push("city");
+  if (!req.body.country) missingFields.push("country");
+  if (!req.body.contact_name) missingFields.push("contact_name");
+  if (!req.body.contact_position) missingFields.push("contact_position");
+  if (!req.body.contact_phone) missingFields.push("contact_phone");
+  if (!req.body.contact_email) missingFields.push("contact_email");
+
+  const invalidFields = [];
+  if (!isValidEmail(req.body.contact_email)) invalidFields.push("contact_email");
+  if (!isValidPhoneNumber(req.body.contact_phone)) invalidFields.push("contact_phone");
+
+  let message = "";
+  if (missingFields.length > 0) {
+    message += `Missing required fields: ${missingFields.join(", ")}. `;
+  }
+
+  if (invalidFields.length > 0) {
+    message += `Invalid fields: ${invalidFields.join(", ")}.`;
+  }
+
+  if (message !== "") {
+    return res.status(400).json({
+      message: message,
+    });
+  }
+
+try {
+   const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
+   await knex('warehouses').insert({
+       warehouse_name,
+       address,
+       city,
+       country,
+       contact_name,
+       contact_position,
+       contact_phone,
+       contact_email
+   });
+
+   res.status(201).json({ message: 'New warehouse created successfully', data: req.body });
+} catch (error) {
+   res.status(400).json({ error: `Unable to create new warehouse: ${error}` });
+}
+};
+
 
 // UPDATE warehouse details
 const updateWarehouse = async (req, res) => {
@@ -103,6 +153,7 @@ const updateWarehouse = async (req, res) => {
 
 
 module.exports = {
+  postNewWarehouse,
   getWarehouseList,
   getWarehouseByID,
   updateWarehouse,
