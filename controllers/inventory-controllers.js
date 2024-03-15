@@ -92,12 +92,12 @@ const addNewInventory = async (req, res) => {
 
 // update inventory
 const updateInventory = async (req, res) => {
-
   try {
-    const { category, description, item_name, quantity, status, warehouse_id } = req.body;
+    const { category, description, item_name, quantity, status, warehouse_id } =
+      req.body;
 
     // Set status to "Out Of Stock" if quantity is 0
-     const updatedStatus = quantity === 0 ? "Out Of Stock" : status;
+    const updatedStatus = quantity === 0 ? "Out Of Stock" : status;
 
     const inventoryToUpdate = await knex("inventories")
       .where({ id: req.params.id })
@@ -139,10 +139,32 @@ const updateInventory = async (req, res) => {
   }
 };
 
+//delete inventory
+const DeleteInventory = async (req, res) => {
+  try {
+    const DeletedInventory = await knex("inventories")
+      .where({ id: req.params.id })
+      .delete();
+
+    if (DeletedInventory === 0) {
+      return res
+        .status(404)
+        .json({ message: `Inventory with ID ${req.params.id} not found` });
+    }
+
+    // No Content response
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete Inventory: ${error}`,
+    });
+  }
+};
 
 module.exports = {
   inventories,
   findOneInventory,
   addNewInventory,
   updateInventory,
+  DeleteInventory
 };
