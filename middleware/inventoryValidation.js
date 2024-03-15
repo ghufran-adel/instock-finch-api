@@ -1,7 +1,6 @@
 //middleware function for validating the request body
 const validateInventory = (req, res, next) => {
-  console.log(req.body);
-  console.log("i am running");
+  
   if (!req.body.item_name || !req.body.description || !req.body.category) {
     const missingFields = [];
     if (!req.body.item_name) missingFields.push("item_name");
