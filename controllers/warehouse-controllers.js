@@ -48,60 +48,34 @@ function isValidPhoneNumber(phoneNumber) {
 // UPDATE warehouse details
 const updateWarehouse = async (req, res) => {
 
-  if (req.body.warehouse_name === "") {
-    return res.status(500).json({
-      message: `Warehouse Name cannot be empty`
-    });
-  }
-  if (req.body.address === "") {
-    return res.status(500).json({
-      message: `Street Address cannot be empty`
-    });
-  }
-  if (req.body.city === "") {
-    return res.status(500).json({
-      message: `City cannot be empty`
-    });
-  }
-  if (req.body.country === "") {
-    return res.status(500).json({
-      message: `Country cannot be empty`
-    });
-  }
-  if (req.body.contact_name === "") {
-    return res.status(500).json({
-      message: `Contact Name cannot be empty`
-    });
-  }
-  if (req.body.contact_position === "") {
-    return res.status(500).json({
-      message: `Position cannot be empty`
-    });
-  }
-  if (req.body.contact_phone === "") {
-    return res.status(500).json({
-      message: `Phone Number cannot be empty`
-    });
-  }
-  if (req.body.contact_email === "") {
-    console.log(req.body.contact_email)
-    return res.status(500).json({
-      message: `Email cannot be empty`
-    });
+  const missingFields = [];
+  if (!req.body.warehouse_name) missingFields.push("warehouse_name");
+  if (!req.body.address) missingFields.push("address");
+  if (!req.body.city) missingFields.push("city");
+  if (!req.body.country) missingFields.push("country");
+  if (!req.body.contact_name) missingFields.push("contact_name");
+  if (!req.body.contact_position) missingFields.push("contact_position");
+  if (!req.body.contact_phone) missingFields.push("contact_phone");
+  if (!req.body.contact_email) missingFields.push("contact_email");
+
+  const invalidFields = [];
+  if (!isValidEmail(req.body.contact_email)) invalidFields.push("contact_email");
+  if (!isValidPhoneNumber(req.body.contact_phone)) invalidFields.push("contact_phone");
+
+  let message = "";
+  if (missingFields.length > 0) {
+    message += `Missing required fields: ${missingFields.join(", ")}. `;
   }
 
-  // NEED TO FIX
-  // if (!isValidEmail(req.body.contact_email)) {
-  //   return res.status(500).json({
-  //     message: `Email is not valid`
-  //   });
-  // }
-  // if (!isValidPhoneNumber(req.body.contact_phone)) {
-  //   // console.log(req.body.contact_phone)
-  //   return res.status(500).json({
-  //     message: `Phone Number is not valid`
-  //   });
-  // }
+  if (invalidFields.length > 0) {
+    message += `Invalid fields: ${invalidFields.join(", ")}.`;
+  }
+
+  if (message !== "") {
+    return res.status(400).json({
+      message: message,
+    });
+  }
 
 
   try {
