@@ -10,6 +10,7 @@ const getWarehouseList = async (_req, res) => {
   }
 };
 
+// GET warehouse list by ID
 const getWarehouseByID = async (req, res) => {
   try {
     const warehouseFound = await knex("warehouses").where({
