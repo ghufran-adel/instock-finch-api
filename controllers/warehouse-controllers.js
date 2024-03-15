@@ -31,6 +31,17 @@ const getWarehouseByID = async (req, res) => {
   }
 };
 
+// DELETE warehouse id
+const deleteWarehouse = async(req, res) => {
+  try {
+    await knex("warehouses").where({id: req.params.id}).del();
+    res.status(204).json(`warehouse deleted`)
+  } catch(error) {
+    res.status(404).json({
+      message: `Warehouse ID ${req.params.id} not found`,
+    });
+  }
+}
 
 // Validation checks
 function isValidEmail(email) {
@@ -161,5 +172,6 @@ module.exports = {
   postNewWarehouse,
   getWarehouseList,
   getWarehouseByID,
+  deleteWarehouse,
   updateWarehouse,
 };

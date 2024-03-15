@@ -9,6 +9,11 @@ router
 
 router
     .route("/:id")
+    .delete(warehouseController.deleteWarehouse)
+
+
+router
+    .route("/:id")
     .get(warehouseController.getWarehouseByID);
 
 router
@@ -16,10 +21,3 @@ router
     .patch(warehouseController.updateWarehouse);
 
 module.exports = router;
-
-
-
-
-
-
-
