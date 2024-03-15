@@ -32,6 +32,31 @@ const getWarehouseByID = async (req, res) => {
 
 // POST/CREATE a new warehouse -- ticket J24ID-19 --
 const postNewWarehouse = async (req, res) => {
+  // check input fields
+  if (
+    !req.body.warehouse_name ||
+    !req.body.address ||
+    !req.body.city ||
+    !req.body.country ||
+    !req.body.contact_name ||
+    !req.body.contact_position ||
+    !req.body.contact_phone ||
+    !req.body.contact_email
+  ) {
+    const missingFields = [];
+    if (!req.body.warehouse_name) missingFields.push("warehouse_name");
+    if (!req.body.address) missingFields.push("address");
+    if (!req.body.city) missingFields.push("city");
+    if (!req.body.contact_name) missingFields.push("contact_name");
+    if (!req.body.contact_position) missingFields.push("contact_position");
+    if (!req.body.contact_phone) missingFields.push("contact_phone");
+    if (!req.body.contact_email) missingFields.push("contact_email");
+
+    return res.status(400).json({
+      message: `Missing required fields: ${missingFields.join(", ")}`,
+    });
+  }
+  // insert new warehouse
   try {
       const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
       await knex('warehouses').insert({
