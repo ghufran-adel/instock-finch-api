@@ -71,4 +71,50 @@ const addNewInventory = async (req, res) => {
     });
   }
 };
-module.exports = { inventories, findOneInventory, addNewInventory };
+
+// update inventory
+const updateInventory = async (req, res) => {
+  // Check input fields
+  try {
+    const { category, description, item_name, quantity, status, warehouse_id } = req.body;
+
+    // Set status to "Out Of Stock" if quantity is 0
+     const updatedStatus = quantity === 0 ? "Out Of Stock" : status;
+
+    const inventoryToUpdate = await knex("inventories")
+      .where({ id: req.params.id })
+      .update({
+        category,
+        description,
+        item_name,
+        quantity,
+        status: updatedStatus,
+        updated_at: new Date(),
+        warehouse_id,
+      });
+
+    if (inventoryToUpdate === 0) {
+      return res.status(404).json({
+        message: `Inventory with ID ${req.params.id} not found`,
+      });
+    }
+
+    const updatedInventory = await knex("inventories").where({
+      id: req.params.id,
+    });
+
+    res.json(updatedInventory[0]);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to update inventory with ID ${req.params.id}: ${error}`,
+    });
+  }
+};
+
+
+module.exports = {
+  inventories,
+  findOneInventory,
+  addNewInventory,
+  updateInventory,
+};
