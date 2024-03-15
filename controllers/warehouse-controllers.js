@@ -29,11 +29,8 @@ const getWarehouseByID = async (req, res) => {
   }
 };
 
-// Response returns 404 if warehouse ID is not found
 
-// Response returns 204 if successfully deleted
-
-// No response body
+// DELETE warehouse id
 const deleteWarehouse = async(req, res) => {
   try {
     const getWarehouseId = await knex("warehouses").where({id: req.params.id}).del();
@@ -42,7 +39,7 @@ const deleteWarehouse = async(req, res) => {
         message: `Warehouse ID ${req.params.id} not found`
       })
     }
-    res.status(204).json({message: `warehouse ${req.params.id} succesffully deleted`})
+    res.status(204).send(`warehouse deleted`)
   } catch(error) {
     res.status(500).json({
       message: `Encountering error ${error}`,
