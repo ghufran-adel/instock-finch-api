@@ -8,6 +8,10 @@ router
 
 router
     .route("/:id")
+    .delete(warehouseController.deleteWarehouse)
+
+router
+    .route("/:id")
     .get(warehouseController.getWarehouseByID);
 
 router
