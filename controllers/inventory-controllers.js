@@ -73,9 +73,18 @@ const addNewInventory = async (req, res) => {
       }`,
     });
   }
+  const { category, description, item_name, quantity, warehouse_id, status } =
+    req.body;
   // insert a data entry to database
   try {
-    const result = await knex("inventories").insert(req.body);
+    const result = await knex("inventories").insert({
+      category,
+      description,
+      item_name,
+      quantity,
+      warehouse_id,
+      status,
+    });
 
     const newItemId = result[0];
     const createdInventoryItem = await knex("inventories").where({
