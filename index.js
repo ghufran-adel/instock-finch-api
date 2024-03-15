@@ -10,6 +10,8 @@ const port = PORT || 5051;
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
+
+
 const inventoryRoutes = require("./routes/inventory-routes");
 const warehouseRoutes = require("./routes/warehouse-routes");
 
@@ -17,6 +19,9 @@ const warehouseRoutes = require("./routes/warehouse-routes");
 app.use("/api/warehouses", warehouseRoutes);
 app.use("/api/inventories", inventoryRoutes);
 
+
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
