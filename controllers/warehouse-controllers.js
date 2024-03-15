@@ -34,15 +34,10 @@ const getWarehouseByID = async (req, res) => {
 const deleteWarehouse = async(req, res) => {
   try {
     await knex("warehouses").where({id: req.params.id}).del();
-    if(!req.params.id) {
-      res.status(404).json({
-        message: `Warehouse ID ${req.params.id} not found`
-      })
-    }
     res.status(204).json(`warehouse deleted`)
   } catch(error) {
-    res.status(500).json({
-      message: `Encountering error ${error}`,
+    res.status(404).json({
+      message: `Warehouse ID ${req.params.id} not found`,
     });
   }
 }
