@@ -90,59 +90,32 @@ const addNewInventory = async (req, res) => {
   }
 };
 
-// update inventory
-const updateInventory = async (req, res) => {
-
+//delete inventory
+const DeleteInventory = async (req, res) => {
   try {
-    const { category, description, item_name, quantity, status, warehouse_id } = req.body;
-
-    // Set status to "Out Of Stock" if quantity is 0
-     const updatedStatus = quantity === 0 ? "Out Of Stock" : status;
-
-    const inventoryToUpdate = await knex("inventories")
+    const DeletedInventory = await knex("inventories")
       .where({ id: req.params.id })
-      .update({
-        category,
-        description,
-        item_name,
-        quantity,
-        status: updatedStatus,
-        updated_at: new Date(),
-        warehouse_id,
-      });
+      .delete();
 
-    if (inventoryToUpdate === 0) {
-      return res.status(404).json({
-        message: `Inventory with ID ${req.params.id} not found`,
-      });
-    }
-    // Check if the warehouse_id exists in the warehouses table
-    const existingWarehouse = await knex("warehouses")
-      .where({ id: req.body.warehouse_id })
-      .first();
-
-    if (!existingWarehouse) {
-      return res.status(400).json({
-        message: `Warehouse with ID ${req.body.warehouse_id} not found`,
-      });
+    if (DeletedInventory === 0) {
+      return res
+        .status(404)
+        .json({ message: `Inventory with ID ${req.params.id} not found` });
     }
 
-    const updatedInventory = await knex("inventories").where({
-      id: req.params.id,
-    });
-
-    res.status(200).json(updatedInventory[0]);
+    // No Content response
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).json({
-      message: `Unable to update inventory with ID ${req.params.id}: ${error}`,
+      message: `Unable to delete Inventory: ${error}`,
     });
   }
 };
-
 
 module.exports = {
   inventories,
   findOneInventory,
   addNewInventory,
   updateInventory,
+  DeleteInventory
 };
