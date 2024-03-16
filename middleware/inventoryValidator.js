@@ -21,8 +21,20 @@ const inventoryValidator = async (req, res, next) => {
       "Quanity field is not valid, please input a valid integer."
     );
   }
-  // check if warehouse_id is in the warehouse table
+  // validate quantity cant be 0 if status is instock
+  console.log(req.body.status.toLowerCase());
+  if (
+    req.body.status &&
+    req.body.status.trim().toLowerCase() == "in stock" &&
+    Number.isInteger(req.body.quantity) &&
+    req.body.quantity === 0
+  ) {
+    errorMessages.push(
+      "Quanity field is not valid, please input a number greater than 0 if item is instock."
+    );
+  }
   if (req.body.warehouse_id) {
+    // check if warehouse_id is in the warehouse table
     const warehouseFound = await knex("warehouses").where({
       id: req.body.warehouse_id,
     });
