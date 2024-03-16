@@ -22,7 +22,6 @@ const inventoryValidator = async (req, res, next) => {
     );
   }
   // validate quantity cant be 0 if status is instock
-  console.log(req.body.status.toLowerCase());
   if (
     req.body.status &&
     req.body.status.trim().toLowerCase() == "in stock" &&
