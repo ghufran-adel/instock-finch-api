@@ -32,11 +32,11 @@ const getWarehouseByID = async (req, res) => {
 };
 
 // DELETE warehouse id
-const deleteWarehouse = async(req, res) => {
+const deleteWarehouse = async (req, res) => {
   try {
-    await knex("warehouses").where({id: req.params.id}).del();
+    await knex("warehouses").where({ id: req.params.id }).del();
     res.status(204).json(`warehouse deleted`)
-  } catch(error) {
+  } catch (error) {
     res.status(404).json({
       message: `Warehouse ID ${req.params.id} not found`,
     });
@@ -55,7 +55,6 @@ function isValidPhoneNumber(phoneNumber) {
   const phoneRegex = /^(?:\+\d{1,2}\s\(\d{3}\)\s\d{3}-\d{4}|\d{3}-\d{3}-\d{4})$/;
   return phoneRegex.test(phoneNumber);
 };
-
 
 // POST/CREATE a new warehouse -- ticket J24ID-19 --
 const postNewWarehouse = async (req, res) => {
@@ -164,9 +163,33 @@ const updateWarehouse = async (req, res) => {
   }
 };
 
-
-
-
+// GET inventory for given warehouse
+const getWarehouseInventoryList = async (req, res) => {
+  try {
+    const inventoryList = await knex("inventories").where({ warehouse_id: req.params.id })
+    const inventoryArr = []
+    if (!req.params.id || inventoryList.length === 0) {
+      res.status(404).json({
+        message: `warehouse ${req.params.id} not found`
+      })
+    }
+    inventoryList.map((inventory) => {
+      const inventoryObj = {
+        id: (inventory.id),
+        item_name: (inventory.item_name),
+        category: (inventory.category),
+        status: (inventory.status),
+        quantity: (inventory.quantity),
+      }
+      return(inventoryArr.push(inventoryObj))
+    })
+    res.status(200).json(inventoryArr);
+  } catch (error) {
+    res.status(500).json({
+      message: `error ${error}`
+    })
+  }
+}
 
 module.exports = {
   postNewWarehouse,
@@ -174,4 +197,5 @@ module.exports = {
   getWarehouseByID,
   deleteWarehouse,
   updateWarehouse,
+  getWarehouseInventoryList,
 };
