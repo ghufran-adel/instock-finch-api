@@ -4,11 +4,13 @@ const warehouseController = require("../controllers/warehouse-controllers");
 
 router
     .route("/")
-    .get(warehouseController.getWarehouseList);
+    .get(warehouseController.getWarehouseList)
+    .post(warehouseController.postNewWarehouse);
 
 router
     .route("/:id")
     .delete(warehouseController.deleteWarehouse)
+
 
 router
     .route("/:id")
