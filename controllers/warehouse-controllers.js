@@ -141,9 +141,21 @@ const updateWarehouse = async (req, res) => {
 
 
   try {
+    const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
     const rowsUpdated = await knex("warehouses")
       .where({ id: req.params.id })
-      .update(req.body);
+      .update({
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email,
+        updated_at: new Date(),
+
+      });
 
     if (rowsUpdated === 0) {
       return res.status(404).json({
