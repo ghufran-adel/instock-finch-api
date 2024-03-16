@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 
+
 // GET warehouse list
 const getWarehouseList = async (_req, res) => {
   try {
@@ -55,6 +56,57 @@ function isValidPhoneNumber(phoneNumber) {
   return phoneRegex.test(phoneNumber);
 };
 
+
+// POST/CREATE a new warehouse -- ticket J24ID-19 --
+const postNewWarehouse = async (req, res) => {
+  const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
+
+  const missingFields = [];
+  if (!warehouse_name) missingFields.push("warehouse_name");
+  if (!address) missingFields.push("address");
+  if (!city) missingFields.push("city");
+  if (!country) missingFields.push("country");
+  if (!contact_name) missingFields.push("contact_name");
+  if (!contact_position) missingFields.push("contact_position");
+  if (!contact_phone) missingFields.push("contact_phone");
+  if (!contact_email) missingFields.push("contact_email");
+
+  const invalidFields = [];
+  if (!isValidEmail(contact_email)) invalidFields.push("contact_email");
+  if (!isValidPhoneNumber(contact_phone)) invalidFields.push("contact_phone");
+
+  let message = "";
+  if (missingFields.length > 0) {
+    message += `Missing required fields: ${missingFields.join(", ")}. `;
+  }
+
+  if (invalidFields.length > 0) {
+    message += `Invalid fields: ${invalidFields.join(", ")}.`;
+  }
+
+  if (message !== "") {
+    return res.status(400).json({
+      message: message,
+    });
+  }
+
+  try {
+    await knex('warehouses').insert({
+      warehouse_name,
+      address,
+      city,
+      country,
+      contact_name,
+      contact_position,
+      contact_phone,
+      contact_email
+    });
+
+    res.status(201).json({ message: 'New warehouse created successfully', data: req.body });
+  } catch (error) {
+    res.status(400).json({ error: `Unable to create new warehouse: ${error}` });
+  }
+};
 
 // UPDATE warehouse details
 const updateWarehouse = async (req, res) => {
@@ -113,7 +165,11 @@ const updateWarehouse = async (req, res) => {
 };
 
 
+
+
+
 module.exports = {
+  postNewWarehouse,
   getWarehouseList,
   getWarehouseByID,
   deleteWarehouse,
