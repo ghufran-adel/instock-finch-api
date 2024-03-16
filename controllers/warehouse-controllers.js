@@ -111,22 +111,16 @@ const updateWarehouse = async (req, res) => {
   }
 };
 
-// GET /api/warehouses/:id/inventories
-// Response returns 404 if warehouse ID is not found
-// Response returns 200 if warehouse exists
-
 // GET inventory for given warehouse
 const getWarehouseInventoryList = async (req, res) => {
   try {
     const inventoryList = await knex("inventories").where({ warehouse_id: req.params.id })
     const inventoryArr = []
-
-    if (!req.params.id) {
+    if (!req.params.id || inventoryList.length === 0) {
       res.status(404).json({
         message: `warehouse ${req.params.id} not found`
       })
     }
-
     inventoryList.map((inventory) => {
       const inventoryObj = {
         id: (inventory.id),
@@ -137,10 +131,7 @@ const getWarehouseInventoryList = async (req, res) => {
       }
       return(inventoryArr.push(inventoryObj))
     })
-    console.log(inventoryArr)
-
     res.status(200).json(inventoryArr);
-
   } catch (error) {
     res.status(500).json({
       message: `error ${error}`
